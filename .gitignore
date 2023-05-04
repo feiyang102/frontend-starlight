@@ -1,1 +1,6 @@
 .DS_Store
+*.dSYM
+*.plist
+launch.json
+tasks.json
+算法/英雄哥/9日训练营/Day4/重新排列数组
