@@ -37,6 +37,24 @@ var sortArray = function(nums) {
 };
 ```
 
+## 以下使用冒泡排序的方式也是无法通过
+```js
+/**
+ * @param {number[]} nums
+ * @return {number[]}
+ */
+var sortArray = function(nums) {
+    for(let i = nums.length - 1; i >= 0; i--) {
+        for(let j = 0; j < i; j++) {
+            if(nums[j] > nums[i]) {
+                [nums[j], nums[i]] = [nums[i], nums[j]];
+            }
+        }        
+    }
+    return nums;
+};
+```
+
 测试case 1：小数据量
 ```js
 [5,2,3,1]
