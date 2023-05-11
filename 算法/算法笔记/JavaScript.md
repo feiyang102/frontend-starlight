@@ -3,6 +3,27 @@
 ```js
 // 匹配二进制数
 '111011'.match(/1+/g).map(a => a.length) // [3, 2]
+/*
+给字符串中整数前后加 * 号
+https://blog.csdn.net/qq_42744920/article/details/125842516
+$&  代表匹配的字符
+$1,...$9    代表匹配到的字符，最多 9 个
+
+*/
+let str = 'Jkdi234klowe90a3';
+console.log(str.replace(/\d+/g, '*$&*'));// 
+
+str = "hello-shen-zhen";
+str.replace(/-(\w)/g, function ($0,$1) {
+    console.log($0);
+    console.log($1);
+    return $1.toUpperCase();
+});
+// -s
+// s
+// -z
+// z
+// 'helloShenZhen'
 
 /*
 各种字符对应 ASCII 码
