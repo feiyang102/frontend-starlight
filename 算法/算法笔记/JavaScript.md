@@ -78,3 +78,11 @@ Math.abs();
 // 开根号
 Math.sqrt();
 ```
+
+## 字符串操作
+```js
+// 判断是否包含某段字符串
+'asfd'.includes('fd') // true
+// 正则匹配
+'asdf'.match(/[a-z]/) // true
+```
