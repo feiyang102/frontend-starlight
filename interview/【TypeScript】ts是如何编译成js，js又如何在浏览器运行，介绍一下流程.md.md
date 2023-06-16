@@ -1,5 +1,3 @@
-#JavaScript #Typescript #浏览器
-
 # 1、TypeScript 编译成 JavaScript 的流程：
 
 编写 TypeScript 代码：开发人员使用 TypeScript 语言编写代码，使用 TypeScript 所提供的类型检查、面向对象等特性。
@@ -25,3 +23,4 @@ JavaScript 解析与执行：浏览器解析 JavaScript 代码，并执行其中
 # 3、总结
 综上所述，TypeScript 代码需要通过编译器将其编译成 JavaScript 代码，而 JavaScript 代码则需要在浏览器中下载、解析和执行，才能最终呈现出页面内容，并与用户进行交互。
 
+#JavaScript #Typescript #浏览器

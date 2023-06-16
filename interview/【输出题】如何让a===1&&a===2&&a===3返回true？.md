@@ -71,3 +71,5 @@ console.log(!!'p.a === 1 && p.a === 2 && p.a === 3')
 [如何实现a===1 && a===2 && a===3返回true？](https://mp.weixin.qq.com/s?__biz=MjM5MDA2MTI1MA==&mid=2649111285&idx=3&sn=4ea91d9bafd6e2f2426ec885d0d4a6c4&chksm=be581d58892f944eb907b36180a361c6e646f394690dca435fa599e80edaaeb3874355903238&scene=27)
 
 [一道JS题，让我更深刻的理解了JS的执行机制](https://juejin.cn/post/7171748794164805645)
+
+#输出题
