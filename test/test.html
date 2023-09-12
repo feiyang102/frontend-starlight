@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <!-- <meta name="viewport" center="width=device-width, initial-scale=1.0"> -->
+    <meta name="viewport" content="width=device-width, initial-scale=0.5, minimum-scale=0.5, maximum-scale=0.5"/>
+    <title>测试页面</title>
+    <style>
+        /* 周围的三角形模拟 */
+        .box1 {
+            width: 0;
+            height: 0;
+            border: 100px solid;
+            border-color: orange blue red green;
+        }
+
+        /* 一个正向三角形 */
+        .box2 {
+            width: 0;
+            height: 0;
+            border-top: 50px solid red;
+            border-right: 50px solid transparent;
+            border-left: 50px solid transparent;
+        }
+
+        /* 原理是通过让 content 变为0以后，主体边框和两侧边框模拟出来的 */
+        .box3 {
+            width: 20px;
+            height: 20px;
+            border-bottom: 100px solid black;
+            border-left: 100px solid red;
+            border-right: 100px solid blue;
+        }
+
+        .radius1 {
+            width: 0;
+            height: 0;
+            border: 100px solid;
+            border-color: orange blue red green;
+            border-radius: 100px;
+        }
+
+        .radius2 {
+            width: 0;
+            height: 0;
+            border-radius: 100px;
+            border-bottom: 100px solid red;
+            border-left: 50px solid transparent;
+            border-right: 50px solid transparent;
+        }
+
+        .radius3 {
+            border: 100px solid transparent;
+            width: 0;
+            height: 0;
+            border-radius: 100px;
+            border-top-color: red;
+        }
+
+        .square1 {
+            /* 注意不能用10%。 safari 浏览器 body 左右会有margin，所以 10% < 10vw */
+            /* width: 10%; */
+            width: 10vw;
+            height: 10vw;
+            background: tomato;
+        }
+
+        .square2 {
+            width: 20%;
+            height: 0;
+            padding-top: 20%;
+            background: orange;
+        }
+
+        .square3 {
+            width: 10%;
+            overflow: hidden;
+            background: yellow;
+        }
+
+        .square3::after {
+            content: '';
+            display: block;
+            margin-top: 100%;
+        }
+
+        .scale {
+            background-color: red;
+            height: 1px;
+            /* transform: scaleY(0.5); */
+        }
+        .scale2 {
+            margin-top: 10px;
+            background-color: red;
+            height: 1px;
+            transform: scaleY(0.5);
+        }
+        .size1 {
+            font-size: 12px;
+        }
+        .size2 {
+            transform: scale(0.5);
+            font-size: 12px;
+            display: inline-block;
+        }
+        .size3 {
+            zoom: 0.5;
+            font-size: 12px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="box1"></div>
+    <div class="box2"></div>
+    <div class="box3"></div>
+    <div class="radius1"></div>
+    <div class="radius2"></div>
+    <div class="radius3"></div>
+    <div class="square1"></div>
+    <div class="square2"></div>
+    <div class="square3"></div>
+    <div class="scale"></div>
+    <div class="scale2"></div>
+    <div class="size1">这是一个测试字体 hello</div>
+    <div class="size2">这是一个测试字体 hello</div>
+    <div class="size1">这是一个测试字体 hello</div>
+    <div class="size3">这是一个测试字体 hello</div>
+    <div class="size1">这是一个测试字体 hello</div>
+    <img src="">
+    <object data="" type=""></object>
+    <input >
+    <textarea  ></textarea>
+</body>
+
+</html>
