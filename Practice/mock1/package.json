@@ -1,0 +1,17 @@
+{
+  "name": "mock1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "glob": "^10.3.10",
+    "koa-logger": "^3.2.1",
+    "koa-router": "^12.0.1"
+  }
+}
