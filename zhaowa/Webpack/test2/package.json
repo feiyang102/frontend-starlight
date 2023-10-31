@@ -1,0 +1,16 @@
+{
+    "name": "test2",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "script-test": "node index.js",
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "webpack-test": "webpack"
+    },
+    "author": "",
+    "license": "ISC",
+    "config": {
+        "port": 3000
+    }
+}
