@@ -1,0 +1,20 @@
+{
+  "name": "test1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test1": "webpack ./runoob1.js --output-filename ./bundle.js",
+    "test2": "webpack ./runoob1.js --output-filename ./bundle.js --module-bind 'css=style-loader!css-loader'",
+    "test3": "webpack"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "css-loader": "^6.8.1",
+    "style-loader": "^3.3.3",
+    "webpack": "^5.89.0",
+    "webpack-cli": "^5.1.4"
+  },
+  "type": "commonjs"
+}
