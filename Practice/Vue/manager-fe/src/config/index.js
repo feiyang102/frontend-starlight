@@ -4,7 +4,7 @@ const envConfig = {
         baseApi: "",
         mockApi: "https://mock.apifox.com/m1/3777977-0-default/"
     },
-    prod: {
+    production: {
         baseApi: "",
         mockApi: ""
     },
@@ -17,5 +17,6 @@ const envConfig = {
 export default {
     env,
     mock: true,
+    nameSpace: "manager",
     ...envConfig[env]
 }
