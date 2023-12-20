@@ -1,39 +1,54 @@
 <template>
-    <h1>欢迎来到 vue3 + vite 的世界</h1>
-    <router-link to="/detail"><el-button>去详情页</el-button></router-link>
-    <el-button @click="gotoWelcome">去主页</el-button>
-    <router-view></router-view>
+    <div class="container">
+        <div class="side"></div>
+        <div class="content-right">
+            <div class="nav-top">菜单</div>
+            <div class="wrapper">
+                <div class="main-page">
+                    <router-view></router-view>
+                </div>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script setup>
-import { useRouter } from "vue-router";
-import { onMounted } from "vue";
-import request from "../utils/request";
-import storage from "../utils/storage";
-
-onMounted(() => {
-    // 测试 request 请求方法
-    // request({
-    //     method: "get",
-    //     url: "/user/login"
-    // }).then(res => {
-    //     console.log("请求结果为：", res);
-    // });
-
-    // 测试 request.get 请求方法
-    // request.get("/user/login").then(res => {
-    //     console.log("请求结果为1：", res);
-    // });
-
-    // 测试 storage.js 是否正常工作
-    storage.setItem("user", { id: 1, desc: "asc", age: 31 });
-    console.log(storage.getItem("user"));;
-});
-
-const router = useRouter();
-const gotoWelcome = function () {
-    router.push("/welcome");
-};
 </script>
 
-<style scoped></style>
+<style scoped>
+.container {
+    position: relative;
+}
+
+.side {
+    position: fixed;
+    width: 200px;
+    height: 100%;
+    color: #fff;
+    background-color: #001529;
+}
+
+.content-right {
+    margin-left: 200px;
+}
+
+.nav-top {
+    height: 50px;
+    line-height: 50px;
+    display: flex;
+    justify-content: space-between; /* 两端对齐 */
+    padding: 0 20px;
+}
+
+.wrapper {
+    background-color: #eef0f3;
+    height: calc(100vh - 50px);
+    padding: 20px;
+}
+
+.main-page {
+    background-color: #fff;
+    height: 100%;
+    padding: 20px;
+}
+</style>

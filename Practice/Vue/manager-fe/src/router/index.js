@@ -8,6 +8,7 @@ const routes = [
         path: "/",
         name: "home",
         component: Home,
+        redirect: "/welcome",
         children: [
             {
                 path: "/welcome",
