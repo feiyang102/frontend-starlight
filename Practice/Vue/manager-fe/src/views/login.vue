@@ -58,13 +58,19 @@ const rules = reactive({
 
 const submitForm = async (formEl) => {
     if (!formEl) return;
-    await formEl.validate((valid, fields) => {
+    await formEl.validate(async (valid, fields) => {
         if (valid) {
-            login(ruleForm).then(res => {
-                store.commit("saveUserInfo", res.data);
-                // 登录成功我们直接跳转到 welcome 页面
-                route.push("/welcome");
-            });
+            login(ruleForm)
+                .then((res) => {
+                    console.log("登录：", res);
+                    store.commit("saveUserInfo", res.data);
+                    // 登录成功我们直接跳转到 welcome 页面
+                    route.push("/welcome");
+                })
+                // 这里注意要增加错误信息的捕获，否则控制台会报未捕获的错误信息
+                .catch((error) => {
+                    console.log(error);
+                });
         } else {
             console.log("error submit!", fields);
         }

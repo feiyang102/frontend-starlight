@@ -25,5 +25,5 @@ const userSchema = mongoose.Schema({
     },
 });
 
-// 关系绑定表示当前模型的单数名称, 模型, 对应集合
+// 关系绑定表示当前模型的单数名称 , 模型, 对应集合
 module.exports = mongoose.model('User', userSchema, 'users');

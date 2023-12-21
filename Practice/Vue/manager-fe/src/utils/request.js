@@ -1,6 +1,7 @@
 import axios from "axios";
 import config from "../config";
-import ElMessage from "element-plus";
+import { ElMessage } from "element-plus";
+import router from "../router";
 
 const NETWORK_ERROR = "网络请求异常，请稍后再试";
 
@@ -10,7 +11,7 @@ const instance = axios.create({
 });
 
 // 请求拦截
-axios.interceptors.request.use(
+instance.interceptors.request.use(
     function (config) {
         // 在发送请求之前做些什么
         const headers = config.headers;
@@ -26,12 +27,18 @@ axios.interceptors.request.use(
 );
 
 // 响应拦截
-axios.interceptors.response.use(function (response) {
-    const { code, message } = response.data;
+instance.interceptors.response.use(function (response) {
+    const { code, msg } = response.data;
     if (code === 200) {
         return response.data;
+    } else if(code === 20001) {
+        ElMessage.error(msg);
+        setTimeout(() => {
+            router.push("/login");
+        }, 3000);
+        return Promise.reject(msg);
     } else {
-        ElMessage.error(message || NETWORK_ERROR);
+        ElMessage.error(msg || NETWORK_ERROR);
     }
 });
 

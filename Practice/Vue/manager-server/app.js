@@ -6,6 +6,7 @@ const onerror = require("koa-onerror");
 const bodyparser = require("koa-bodyparser");
 const logger = require("koa-logger");
 const log4js = require("./utils/log4j");
+const router = require("koa-router")();
 
 const index = require("./routes/index");
 const users = require("./routes/users");
@@ -35,9 +36,13 @@ app.use(async (ctx, next) => {
     await next();
 });
 
+//一级路由
+router.prefix("/api");
+router.use(users.routes());
+
 // routes
 app.use(index.routes(), index.allowedMethods());
-app.use(users.routes(), users.allowedMethods());
+app.use(router.routes(), users.allowedMethods());
 
 // error-handling
 app.on("error", (err, ctx) => {
