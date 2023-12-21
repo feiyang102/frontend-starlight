@@ -65,17 +65,19 @@ function request(options) {
 //     };
 // });
 
-const _helper = function (url, data) {
-    return request({
-        url,
-        data,
-        method: item,
-    });
+const _helper = function (method) {
+    return function (url, data) {
+        return request({
+            url,
+            data,
+            method,
+        });
+    }
 };
 
-request.get = _helper;
-request.post = _helper;
-request.put = _helper;
-request.delete = _helper;
+request.get = _helper("get");
+request.post = _helper("post");
+request.put = _helper("put");
+request.delete = _helper("delete");
 
 export default request;
