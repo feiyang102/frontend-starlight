@@ -37,19 +37,22 @@
                     <span>菜单</span>
                 </div>
                 <div class="user-info">
-                    <el-dropdown>
+                    <el-dropdown @command="handleCommand">
                         <span class="el-dropdown-link">
-                            <el-badge is-dot class="notify"><el-icon><Bell /></el-icon></el-badge>
+                            <el-badge is-dot class="notify"
+                                ><el-icon><Bell /></el-icon
+                            ></el-badge>
                             <span>{{ userInfo.name }}</span>
                         </span>
                         <template #dropdown>
-                        <el-dropdown-menu>
-                            <el-dropdown-item>{{ userInfo.email }}</el-dropdown-item>
-                            <el-dropdown-item>退出</el-dropdown-item>
-                        </el-dropdown-menu>
+                            <el-dropdown-menu>
+                                <el-dropdown-item command="a">{{
+                                    userInfo.email
+                                }}</el-dropdown-item>
+                                <el-dropdown-item command="logout">退出</el-dropdown-item>
+                            </el-dropdown-menu>
                         </template>
                     </el-dropdown>
-
                 </div>
             </div>
             <div class="wrapper">
@@ -63,11 +66,24 @@
 
 <script setup>
 import { ref } from "vue";
+import { useRouter } from "vue-router";
+import { useStore } from "vuex";
+
+const route = new useRouter();
+const store = new useStore();
 
 const userInfo = ref({
     name: "666",
     email: "123132132@qq.com",
 });
+
+const handleCommand = function(command) {
+    if(command === "logout") {
+        store.commit("saveUserInfo", "");
+        route.push("/login");
+    }
+    console.log(command);
+}
 </script>
 
 <style scoped>
@@ -105,12 +121,14 @@ const userInfo = ref({
 }
 
 /* 顶部菜单栏伸缩按钮 */
-.menu,.user-info {
+.menu,
+.user-info {
     display: flex;
     align-items: center;
 }
 
-.menu span, .user-info span {
+.menu span,
+.user-info span {
     padding-left: 10px;
     font-size: 16px;
 }
