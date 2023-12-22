@@ -1,11 +1,15 @@
 <template>
     <div class="container">
-        <div class="side">
+        <div :class="['side', isCollapse ? 'collapse' : 'expand']">
             <div class="logo">
                 <img src="../assets/images/star.svg" />
-                <span>manager</span>
+                <span v-show="!isCollapse">manager</span>
             </div>
-            <el-menu background-color="#041527" text-color="fff">
+            <el-menu
+                :collapse="isCollapse"
+                background-color="#041527"
+                text-color="fff"
+            >
                 <el-sub-menu index="1">
                     <template #title>
                         <el-icon><Grid /></el-icon>
@@ -30,10 +34,10 @@
                 </el-sub-menu>
             </el-menu>
         </div>
-        <div class="content-right">
+        <div :class="['content-right', isCollapse ? 'collapse' : 'expand']">
             <div class="nav-top">
-                <div class="menu">
-                    <el-icon><Fold /></el-icon>
+                <div class="menu" @click="handleToggleMenu">
+                    <el-icon><Fold v-show="!isCollapse" /><Expand v-show="isCollapse" /></el-icon>
                     <span>菜单</span>
                 </div>
                 <div class="user-info">
@@ -49,7 +53,9 @@
                                 <el-dropdown-item command="a">{{
                                     userInfo.email
                                 }}</el-dropdown-item>
-                                <el-dropdown-item command="logout">退出</el-dropdown-item>
+                                <el-dropdown-item command="logout"
+                                    >退出</el-dropdown-item
+                                >
                             </el-dropdown-menu>
                         </template>
                     </el-dropdown>
@@ -77,13 +83,18 @@ const userInfo = ref({
     email: "123132132@qq.com",
 });
 
-const handleCommand = function(command) {
-    if(command === "logout") {
+const isCollapse = ref(false);
+const handleToggleMenu = function () {
+    isCollapse.value = !isCollapse.value;
+};
+
+const handleCommand = function (command) {
+    if (command === "logout") {
         store.commit("saveUserInfo", "");
         route.push("/login");
     }
     console.log(command);
-}
+};
 </script>
 
 <style scoped>
@@ -97,11 +108,21 @@ const handleCommand = function(command) {
     height: 100%;
     color: #fff;
     background-color: #001529;
+    transition: width 0.7s;
+}
+
+.side.collapse {
+    width: 64px;
+}
+.side.expand {
+
 }
 
 .logo {
     margin: 15px auto;
     padding: 0 10px;
+    display: flex;
+    align-items: center;
 }
 .logo img {
     height: 40px;
@@ -150,6 +171,12 @@ const handleCommand = function(command) {
 }
 
 .content-right {
+    transition: margin-left 0.7s;
+}
+.content-right.collapse {
+    margin-left: 64px;
+}
+.content-right.expand {
     margin-left: 200px;
 }
 
