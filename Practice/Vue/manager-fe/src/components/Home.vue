@@ -37,7 +37,10 @@
         <div :class="['content-right', isCollapse ? 'collapse' : 'expand']">
             <div class="nav-top">
                 <div class="menu" @click="handleToggleMenu">
-                    <el-icon><Fold v-show="!isCollapse" /><Expand v-show="isCollapse" /></el-icon>
+                    <el-icon
+                        ><Fold v-show="!isCollapse" /><Expand
+                            v-show="isCollapse"
+                    /></el-icon>
                     <span>菜单</span>
                 </div>
                 <div class="user-info">
@@ -46,12 +49,12 @@
                             <el-badge is-dot class="notify"
                                 ><el-icon><Bell /></el-icon
                             ></el-badge>
-                            <span>{{ userInfo.name }}</span>
+                            <span>{{ userInfo.userName }}</span>
                         </span>
                         <template #dropdown>
                             <el-dropdown-menu>
-                                <el-dropdown-item command="a">{{
-                                    userInfo.email
+                                <el-dropdown-item command="a">邮箱 {{
+                                    userInfo.userEmail
                                 }}</el-dropdown-item>
                                 <el-dropdown-item command="logout"
                                     >退出</el-dropdown-item
@@ -71,17 +74,21 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 
 const route = new useRouter();
 const store = new useStore();
 
-const userInfo = ref({
-    name: "666",
-    email: "123132132@qq.com",
-});
+// const userInfo = ref({
+//     name: "666",
+//     email: "123132132@qq.com",
+// });
+
+// store.state.userInfo 本身就是响应式数据
+const userInfo = store.state.userInfo;
+// const userInfo = ref(store.state.userInfo);
 
 const isCollapse = ref(false);
 const handleToggleMenu = function () {
@@ -115,7 +122,6 @@ const handleCommand = function (command) {
     width: 64px;
 }
 .side.expand {
-
 }
 
 .logo {
