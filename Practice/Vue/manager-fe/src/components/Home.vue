@@ -1,8 +1,57 @@
 <template>
     <div class="container">
-        <div class="side"></div>
+        <div class="side">
+            <div class="logo">
+                <img src="../assets/images/star.svg" />
+                <span>manager</span>
+            </div>
+            <el-menu background-color="#041527" text-color="fff">
+                <el-sub-menu index="1">
+                    <template #title>
+                        <el-icon><Grid /></el-icon>
+                        <span>系统管理</span>
+                    </template>
+                    <el-menu-item index="1-1">用户管理</el-menu-item>
+                    <el-menu-item index="1-2">菜单管理</el-menu-item>
+                    <el-menu-item index="1-3">角色管理</el-menu-item>
+                    <el-menu-item ndex="1-4">部门管理</el-menu-item>
+                </el-sub-menu>
+                <el-sub-menu index="2">
+                    <template #title>
+                        <el-icon><Promotion /></el-icon>
+                        <span>系统管理</span>
+                    </template>
+                    <el-menu-item index="2-1">
+                        <span>休假管理</span>
+                    </el-menu-item>
+                    <el-menu-item index="2-2">
+                        <span>待我审批</span>
+                    </el-menu-item>
+                </el-sub-menu>
+            </el-menu>
+        </div>
         <div class="content-right">
-            <div class="nav-top">菜单</div>
+            <div class="nav-top">
+                <div class="menu">
+                    <el-icon><Fold /></el-icon>
+                    <span>菜单</span>
+                </div>
+                <div class="user-info">
+                    <el-dropdown>
+                        <span class="el-dropdown-link">
+                            <el-badge is-dot class="notify"><el-icon><Bell /></el-icon></el-badge>
+                            <span>{{ userInfo.name }}</span>
+                        </span>
+                        <template #dropdown>
+                        <el-dropdown-menu>
+                            <el-dropdown-item>{{ userInfo.email }}</el-dropdown-item>
+                            <el-dropdown-item>退出</el-dropdown-item>
+                        </el-dropdown-menu>
+                        </template>
+                    </el-dropdown>
+
+                </div>
+            </div>
             <div class="wrapper">
                 <div class="main-page">
                     <router-view></router-view>
@@ -13,6 +62,12 @@
 </template>
 
 <script setup>
+import { ref } from "vue";
+
+const userInfo = ref({
+    name: "666",
+    email: "123132132@qq.com",
+});
 </script>
 
 <style scoped>
@@ -28,8 +83,60 @@
     background-color: #001529;
 }
 
+.logo {
+    margin: 15px auto;
+    padding: 0 10px;
+}
+.logo img {
+    height: 40px;
+}
+.logo span {
+    font-size: 18px;
+    margin-left: 20px;
+}
+
+.el-menu {
+    border-right: none;
+}
+
+.el-menu--vertical {
+    height: calc(100vh - 70px);
+    /* overflow: scroll; */
+}
+
+/* 顶部菜单栏伸缩按钮 */
+.menu,.user-info {
+    display: flex;
+    align-items: center;
+}
+
+.menu span, .user-info span {
+    padding-left: 10px;
+    font-size: 16px;
+}
+
+.menu:hover {
+    cursor: pointer;
+}
+
+.user-info {
+    margin-right: 20px;
+}
+
+.user-info :hover {
+    cursor: pointer;
+}
+
+.user-info .notify {
+    line-height: 16px;
+}
+
 .content-right {
     margin-left: 200px;
+}
+
+.el-dropdown :focus-visible {
+    outline: none;
 }
 
 .nav-top {
