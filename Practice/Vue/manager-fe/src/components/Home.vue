@@ -5,57 +5,42 @@
                 <img src="../assets/images/star.svg" />
                 <span v-show="!isCollapse">manager</span>
             </div>
+            <!-- <tree-menu :collapse="isCollapse" :menuList="menuList"></tree-menu> -->
             <el-menu
                 :collapse="isCollapse"
                 background-color="#041527"
                 text-color="fff"
             >
-                <el-sub-menu index="1">
-                    <template #title>
-                        <el-icon><Grid /></el-icon>
-                        <span>系统管理</span>
-                    </template>
-                    <el-menu-item index="1-1">用户管理</el-menu-item>
-                    <el-menu-item index="1-2">菜单管理</el-menu-item>
-                    <el-menu-item index="1-3">角色管理</el-menu-item>
-                    <el-menu-item ndex="1-4">部门管理</el-menu-item>
-                </el-sub-menu>
-                <el-sub-menu index="2">
-                    <template #title>
-                        <el-icon><Promotion /></el-icon>
-                        <span>系统管理</span>
-                    </template>
-                    <el-menu-item index="2-1">
-                        <span>休假管理</span>
-                    </el-menu-item>
-                    <el-menu-item index="2-2">
-                        <span>待我审批</span>
-                    </el-menu-item>
-                </el-sub-menu>
+                <tree-menu :menuList="menuList"></tree-menu>
             </el-menu>
         </div>
         <div :class="['content-right', isCollapse ? 'collapse' : 'expand']">
             <div class="nav-top">
-                <div class="menu" @click="handleToggleMenu">
-                    <el-icon
+                <div class="menu">
+                    <el-icon @click="handleToggleMenu"
                         ><Fold v-show="!isCollapse" /><Expand
                             v-show="isCollapse"
                     /></el-icon>
-                    <span>菜单</span>
+                    <span>
+                        <BreadCrumb />
+                    </span>
                 </div>
                 <div class="user-info">
                     <el-dropdown @command="handleCommand">
                         <span class="el-dropdown-link">
-                            <el-badge is-dot class="notify"
+                            <el-badge
+                                :is-dot="notifyCount > 0 ? true : false"
+                                class="notify"
                                 ><el-icon><Bell /></el-icon
                             ></el-badge>
                             <span>{{ userInfo.userName }}</span>
                         </span>
                         <template #dropdown>
                             <el-dropdown-menu>
-                                <el-dropdown-item command="a">邮箱 {{
-                                    userInfo.userEmail
-                                }}</el-dropdown-item>
+                                <el-dropdown-item command="a"
+                                    >邮箱
+                                    {{ userInfo.userEmail }}</el-dropdown-item
+                                >
                                 <el-dropdown-item command="logout"
                                     >退出</el-dropdown-item
                                 >
@@ -74,34 +59,52 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
+import { notify, getMenuList } from "../api";
+import TreeMenu from "../components/TreeMenu.vue";
+import BreadCrumb from "../components/BreadCrumb.vue";
 
 const route = new useRouter();
 const store = new useStore();
-
-// const userInfo = ref({
-//     name: "666",
-//     email: "123132132@qq.com",
-// });
 
 // store.state.userInfo 本身就是响应式数据
 const userInfo = store.state.userInfo;
 // const userInfo = ref(store.state.userInfo);
 
+/**
+ * 侧边导航栏
+ */
+// 控制显示和隐藏
 const isCollapse = ref(false);
 const handleToggleMenu = function () {
     isCollapse.value = !isCollapse.value;
 };
 
+// 动态渲染表单相关
+const menuList = ref([]);
+const handleMenuList = async function () {
+    const res = await getMenuList();
+    menuList.value = res.data;
+};
+
+handleMenuList();
+
+// 顶部会员信息
 const handleCommand = function (command) {
     if (command === "logout") {
         store.commit("saveUserInfo", "");
         route.push("/login");
     }
-    console.log(command);
 };
+let notifyCount = ref(0);
+const getNotifyCount = async function () {
+    const res = await notify();
+    notifyCount.value = res.count;
+};
+
+getNotifyCount();
 </script>
 
 <style scoped>

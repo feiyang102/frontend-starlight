@@ -31,7 +31,7 @@ instance.interceptors.response.use(function (response) {
     const { code, msg } = response.data;
     if (code === 200) {
         return response.data;
-    } else if(code === 20001) {
+    } else if (code === 20001) {
         ElMessage.error(msg);
         setTimeout(() => {
             router.push("/login");
@@ -74,12 +74,13 @@ function request(options) {
 
 const _helper = function (method) {
     return function (url, data) {
+        data = data == undefined ? {} : data;
         return request({
             url,
             data,
             method,
         });
-    }
+    };
 };
 
 request.get = _helper("get");

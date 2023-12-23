@@ -8,17 +8,26 @@ const routes = [
         path: "/",
         name: "home",
         component: Home,
-        redirect: "/login",
+        redirect: "/welcome",
+        meta: {
+            title: "首页"
+        },
         children: [
             {
                 path: "/welcome",
                 name: "welcome",
                 component: () => import("../components/Welcome.vue"),
+                meta: {
+                    title: "欢迎页"
+                },
             },
             {
                 path: "/detail",
                 name: "detail",
                 component: () => import("../components/Detail.vue"),
+                meta: {
+                    title: "详情页"
+                },
             },
         ],
     },
