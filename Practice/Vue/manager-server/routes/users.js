@@ -1,6 +1,7 @@
 const router = require("koa-router")();
 const User = require("../models/userSchema");
 const util = require("../utils");
+const jwt = require("jsonwebtoken");
 
 // 二级路由
 router.prefix("/user");
@@ -11,8 +12,19 @@ router.post("/login", async (ctx, next) => {
         password,
     });
 
+    const data = res._doc;
+
+    const token = jwt.sign(
+        {
+            data,
+        },
+        "feiyang",
+        { expiresIn: 30 }
+    );
+
     if (res) {
-        ctx.body = util.success(res);
+        data.token = token;
+        ctx.body = util.success(data);
     } else {
         ctx.body = util.fail("账号或者密码错误！");
     }

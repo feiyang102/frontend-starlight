@@ -89,7 +89,6 @@ const handleMenuList = async function () {
     menuList.value = res.data;
 };
 
-handleMenuList();
 
 // 顶部会员信息
 const handleCommand = function (command) {
@@ -105,6 +104,7 @@ const getNotifyCount = async function () {
 };
 
 getNotifyCount();
+handleMenuList();
 </script>
 
 <style scoped>
@@ -123,8 +123,6 @@ getNotifyCount();
 
 .side.collapse {
     width: 64px;
-}
-.side.expand {
 }
 
 .logo {

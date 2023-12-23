@@ -2,6 +2,7 @@ import axios from "axios";
 import config from "../config";
 import { ElMessage } from "element-plus";
 import router from "../router";
+import storage from "../utils/storage";
 
 const NETWORK_ERROR = "网络请求异常，请稍后再试";
 
@@ -15,8 +16,9 @@ instance.interceptors.request.use(
     function (config) {
         // 在发送请求之前做些什么
         const headers = config.headers;
+        const token = storage.getItem("userInfo").token;
         if (!headers.Authorization) {
-            headers.Authorization = ""; // jwt
+            headers.Authorization = "Bearer " + token; // jwt token
         }
         return config;
     },
