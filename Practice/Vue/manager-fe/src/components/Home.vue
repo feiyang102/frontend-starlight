@@ -10,6 +10,7 @@
                 :collapse="isCollapse"
                 background-color="#041527"
                 text-color="fff"
+                router
             >
                 <tree-menu :menuList="menuList"></tree-menu>
             </el-menu>
@@ -50,9 +51,7 @@
                 </div>
             </div>
             <div class="wrapper">
-                <div class="main-page">
-                    <router-view></router-view>
-                </div>
+                <router-view></router-view>
             </div>
         </div>
     </div>
@@ -205,9 +204,4 @@ handleMenuList();
     padding: 20px;
 }
 
-.main-page {
-    background-color: #fff;
-    height: 100%;
-    padding: 20px;
-}
 </style>

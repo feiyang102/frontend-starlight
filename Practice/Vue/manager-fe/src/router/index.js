@@ -1,7 +1,6 @@
 import { createRouter, createWebHashHistory } from "vue-router";
 import Home from "../components/Home.vue";
-// import Welcome from "../components/Welcome.vue";
-// import Detail from "../components/Detail.vue";
+import User from "../views/User.vue";
 
 const routes = [
     {
@@ -10,7 +9,7 @@ const routes = [
         component: Home,
         redirect: "/welcome",
         meta: {
-            title: "首页"
+            title: "首页",
         },
         children: [
             {
@@ -18,15 +17,15 @@ const routes = [
                 name: "welcome",
                 component: () => import("../components/Welcome.vue"),
                 meta: {
-                    title: "欢迎页"
+                    title: "欢迎页",
                 },
             },
             {
-                path: "/detail",
-                name: "detail",
-                component: () => import("../components/Detail.vue"),
+                path: "/system/user",
+                name: "user",
+                component: User,
                 meta: {
-                    title: "详情页"
+                    title: "用户管理",
                 },
             },
         ],
