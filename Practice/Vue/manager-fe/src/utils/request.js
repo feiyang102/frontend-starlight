@@ -51,11 +51,16 @@ function request(options) {
         options.params = options.data;
     }
 
+    let isMock = config.mock;
+    if(toString.call(options.mock) != "[object Undefined]") {
+        isMock = options.mock;
+    }
+
     // 对生产环境进行特殊处理
     if (config.env === "production") {
         instance.defaults.baseURL = config.baseApi;
     } else {
-        instance.defaults.baseURL = config.mock
+        instance.defaults.baseURL = isMock
             ? config.mockApi
             : config.baseApi;
     }
@@ -75,11 +80,19 @@ function request(options) {
 // });
 
 const _helper = function (method) {
-    return function (url, data) {
-        data = data == undefined ? {} : data;
+    return function (url, data, mock) {
+        // 参数重载
+        if (data == undefined) {
+            data = {};
+        }
+        if (typeof data === "boolean") {
+            mock = data;
+            data = {};
+        }
         return request({
             url,
             data,
+            mock,
             method,
         });
     };

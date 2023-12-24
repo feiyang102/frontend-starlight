@@ -12,7 +12,7 @@ router.post("/login", async (ctx, next) => {
         password,
     }, "userName");// 如果有数据，只查询userName ，这样就不会在前端返回password等信息
 
-    const data = res._doc;
+    const data = res && res._doc;
 
     const token = jwt.sign(
         {
@@ -22,7 +22,7 @@ router.post("/login", async (ctx, next) => {
         { expiresIn: 30 }
     );
 
-    if (res) {
+    if (data) {
         data.token = token;
         ctx.body = util.success(data);
     } else {

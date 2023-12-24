@@ -7,9 +7,9 @@ export function login(data) {
 }
 
 export function notify() {
-    return request.get("/notify/count");
+    return request.get("/notify/count", true);
 }
 
 export function getMenuList() {
-    return request.get("/menu/list");
+    return request.get("/menu/list", true);
 }
