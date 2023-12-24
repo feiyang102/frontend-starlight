@@ -10,7 +10,7 @@ router.post("/login", async (ctx, next) => {
     const res = await User.findOne({
         userName,
         password,
-    });
+    }, "userName");// 如果有数据，只查询userName ，这样就不会在前端返回password等信息
 
     const data = res._doc;
 

@@ -7,7 +7,7 @@ const bodyparser = require("koa-bodyparser");
 const logger = require("koa-logger");
 const log4js = require("./utils/log4j");
 const router = require("koa-router")();
-const jwt = require("jsonwebtoken");
+const jwt = require("koa-jwt");
 const util = require("./utils/index");
 
 const index = require("./routes/index");
@@ -35,22 +35,22 @@ app.use(
 
 // logger
 app.use(async (ctx, next) => {
-    await next();
+    await next().catch((error) => {
+        if(error.status === 401) {
+            ctx.body = util.fail("token令牌未携带或已过期", 50001);
+        }
+    });
 });
+
+// jwt 验证接口
+app.use(jwt({ secret: "feiyang" }).unless({
+    path: ["/api/user/login"]
+}));
 
 //一级路由
 router.prefix("/api");
 router.get("/notify/count", (ctx) => {
-    const token = ctx.request.headers.authorization.split(" ")[1];
-    const data = jwt.verify(token, "feiyang", (error, decoded) => {
-        if (error) {
-            ctx.body = util.fail("token 已过期请重新登录", 50001);
-        }
-        if (decoded) {
-            ctx.body = util.success(decoded);
-        }
-    });
-    // ctx.body = data;
+    ctx.body = "body";
 });
 
 router.use(users.routes());
@@ -65,12 +65,3 @@ app.on("error", (err, ctx) => {
 });
 
 module.exports = app;
-
-// db.article.aggregate([
-//     {
-//         $group: {
-//             _id: "$By",
-//             sum_count: { $sum: 1 },
-//         },
-//     },
-// ]);
