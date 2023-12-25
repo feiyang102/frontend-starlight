@@ -17,3 +17,7 @@ export function getMenuList() {
 export function usersList(params) {
     return request.get("/users/list", params, true);
 }
+
+export function usersDelete(params) {
+    return request.post("/users/delete", params, true);
+}

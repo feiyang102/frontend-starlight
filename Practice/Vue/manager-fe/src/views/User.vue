@@ -31,9 +31,14 @@
     <div class="base-table">
         <div class="action">
             <el-button size="small" type="primary">新增</el-button>
-            <el-button size="small" type="danger">批量删除</el-button>
+            <el-button size="small" type="danger" @click="handleBatchDelete">批量删除</el-button>
         </div>
-        <el-table :data="tableData" border style="width: 100%">
+        <el-table
+            :data="tableData"
+            border
+            style="width: 100%"
+            @selection-change="handleSelectChange"
+        >
             <el-table-column type="selection" width="55"></el-table-column>
             <el-table-column
                 v-for="item in columns"
@@ -41,9 +46,14 @@
                 :label="item.label"
             ></el-table-column>
             <el-table-column label="操作" width="140">
-                <template #default>
+                <template #default="scope">
                     <el-button size="small" type="primary">编辑</el-button>
-                    <el-button size="small" type="danger">删除</el-button>
+                    <el-button
+                        size="small"
+                        type="danger"
+                        @click="handleDelete(scope.row.userId)"
+                        >删除</el-button
+                    >
                 </template>
             </el-table-column>
         </el-table>
@@ -59,19 +69,22 @@
 
 <script setup>
 import { ref, reactive } from "vue";
-import { usersList } from "../api/index";
+import { ElMessage } from "element-plus";
+
+import { usersList, usersDelete } from "../api/index";
 const user = reactive({
     userId: "",
     userName: "",
     state: 0,
 });
-let ruleFormRef = ref();
-let tableData = reactive([]);
-let pager = reactive({
+const ruleFormRef = ref();
+const tableData = ref([]);
+const pager = reactive({
     pageNum: 1,
     pageSize: 10,
-    total: 0
+    total: 0,
 });
+const chooseRows = ref([]);
 // TODO   width="180"
 const columns = reactive([
     { label: "用户ID", prop: "userId" },
@@ -89,7 +102,7 @@ const columns = reactive([
 async function getUsersList() {
     let params = { ...user, ...pager };
     const { data } = await usersList(params);
-    tableData.push(...data.list);
+    tableData.value = data.list;
     pager.total = data.page.total;
 }
 
@@ -106,6 +119,41 @@ function handleReset(formEl) {
 function handleCurrentChange(val) {
     pager.pageNum = val;
     getUsersList();
+}
+// 删除，支持单个删除也批量删除
+async function handleDelete(data) {
+    console.log(data);
+    let userIds;
+    if(data instanceof Array) {
+        if(data.length == 0) return;
+        userIds = data;
+    } else {
+        userIds = [data];
+    }
+    const res = await usersDelete({
+        userIds,
+    });
+
+    if (res.code == 200) {
+        ElMessage.success({
+            // showClose: true,
+            message: "删除成功",
+        });
+        getUsersList();
+    } else {
+        ElMessage.error({
+            message: "删除失败",
+        });
+    }
+}
+
+function handleSelectChange(list) {
+    chooseRows.value = list;
+}
+
+function handleBatchDelete() {
+    const list = chooseRows.value.map(item => item.userId);
+    handleDelete(list);
 }
 
 getUsersList();
