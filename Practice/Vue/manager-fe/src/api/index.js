@@ -13,3 +13,7 @@ export function notify() {
 export function getMenuList() {
     return request.get("/menu/list", true);
 }
+
+export function usersList(params) {
+    return request.get("/users/list", params, true);
+}

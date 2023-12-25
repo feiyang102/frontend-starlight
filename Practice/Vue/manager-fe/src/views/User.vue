@@ -1,36 +1,38 @@
 <template>
     <div class="query-form">
-        <el-form :inline="true" :model="user" class="demo-form-inline">
-            <el-form-item label="用户ID">
+        <el-form
+            ref="ruleFormRef"
+            :inline="true"
+            :model="user"
+            class="demo-form-inline"
+        >
+            <el-form-item label="用户ID" prop="userId">
                 <el-input
                     v-model="user.userId"
                     placeholder="用户ID"
-                    clearable
                 />
             </el-form-item>
-            <el-form-item label="用户名">
+            <el-form-item label="用户名" prop="userName">
                 <el-input
                     v-model="user.userName"
                     placeholder="用户名"
-                    clearable
                 />
             </el-form-item>
-            <el-form-item label="用户状态">
+            <el-form-item label="用户状态" prop="state">
                 <el-select
                     v-model="user.state"
                     placeholder="用户状态"
-                    clearable
                 >
-                    <el-option label="所有" value="0" />
-                    <el-option label="在职" value="1" />
-                    <el-option label="离职" value="2" />
-                    <el-option label="试用期" value="3" />
+                    <el-option label="所有" :value="0" />
+                    <el-option label="在职" :value="1" />
+                    <el-option label="离职" :value="2" />
+                    <el-option label="试用期" :value="3" />
                 </el-select>
             </el-form-item>
 
             <el-form-item>
-                <el-button type="primary">查询</el-button>
-                <el-button>重置</el-button>
+                <el-button type="primary" @click="handleQuery">查询</el-button>
+                <el-button @click="handleReset(ruleFormRef)">重置</el-button>
             </el-form-item>
         </el-form>
     </div>
@@ -56,47 +58,24 @@
         </el-table>
     </div>
     <div class="query-pager">
-        <el-pagination
-            layout="prev, pager, next"
-            :total="1000"
-            class="pager"
-        />
+        <el-pagination layout="prev, pager, next" :total="1000" class="pager" />
     </div>
 </template>
 
 <script setup>
 import { ref, reactive } from "vue";
+import { usersList } from "../api/index";
 const user = reactive({
     userId: "",
     userName: "",
-    state: "",
+    state: 0,
 });
-
-const onSearch = () => {
-    console.log("搜索！");
-};
-
-const tableData = reactive([
-    {
-        userId: "123123123",
-        userName: "123123123",
-        userEmail: "123123123",
-        role: "123123123",
-        state: "123123123",
-        createTime: "123123123",
-        lastLoginTime: "123123123",
-    },
-
-    {
-        userId: "123123123",
-        userName: "123123123",
-        userEmail: "123123123",
-        role: "123123123",
-        state: "123123123",
-        createTime: "123123123",
-        lastLoginTime: "123123123",
-    },
-]);
+let ruleFormRef = ref();
+let tableData = reactive([]);
+let pager = reactive({
+    pageNum: 1,
+    pageSize: 10,
+});
 // TODO   width="180"
 const columns = reactive([
     { label: "用户ID", prop: "userId" },
@@ -107,6 +86,28 @@ const columns = reactive([
     { label: "注册时间", prop: "createTime" },
     { label: "最后登录时间", prop: "lastLoginTime" },
 ]);
+
+/**
+ * 获取用户列表
+ */
+async function getUsersList() {
+    let params = { ...user, ...pager };
+    const { data } = await usersList(params);
+    tableData.push(...data.list);
+    pager.total = data.total;
+}
+
+// 查询按钮
+function handleQuery() {
+    getUsersList();
+}
+// 重置按钮
+function handleReset(formEl) {
+    if (!formEl) return;
+    formEl.resetFields();
+}
+
+getUsersList();
 </script>
 
 <style scoped>
