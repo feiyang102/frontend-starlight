@@ -7,22 +7,13 @@
             class="demo-form-inline"
         >
             <el-form-item label="用户ID" prop="userId">
-                <el-input
-                    v-model="user.userId"
-                    placeholder="用户ID"
-                />
+                <el-input v-model="user.userId" placeholder="用户ID" />
             </el-form-item>
             <el-form-item label="用户名" prop="userName">
-                <el-input
-                    v-model="user.userName"
-                    placeholder="用户名"
-                />
+                <el-input v-model="user.userName" placeholder="用户名" />
             </el-form-item>
             <el-form-item label="用户状态" prop="state">
-                <el-select
-                    v-model="user.state"
-                    placeholder="用户状态"
-                >
+                <el-select v-model="user.state" placeholder="用户状态">
                     <el-option label="所有" :value="0" />
                     <el-option label="在职" :value="1" />
                     <el-option label="离职" :value="2" />
@@ -56,9 +47,13 @@
                 </template>
             </el-table-column>
         </el-table>
-    </div>
-    <div class="query-pager">
-        <el-pagination layout="prev, pager, next" :total="1000" class="pager" />
+        <el-pagination
+            class="pagination"
+            background
+            layout="prev, pager, next"
+            :total="pager.total"
+            @current-change="handleCurrentChange"
+        />
     </div>
 </template>
 
@@ -75,6 +70,7 @@ let tableData = reactive([]);
 let pager = reactive({
     pageNum: 1,
     pageSize: 10,
+    total: 0
 });
 // TODO   width="180"
 const columns = reactive([
@@ -94,7 +90,7 @@ async function getUsersList() {
     let params = { ...user, ...pager };
     const { data } = await usersList(params);
     tableData.push(...data.list);
-    pager.total = data.total;
+    pager.total = data.page.total;
 }
 
 // 查询按钮
@@ -105,6 +101,11 @@ function handleQuery() {
 function handleReset(formEl) {
     if (!formEl) return;
     formEl.resetFields();
+}
+// 分页改变
+function handleCurrentChange(val) {
+    pager.pageNum = val;
+    getUsersList();
 }
 
 getUsersList();
@@ -129,7 +130,8 @@ getUsersList();
     border-bottom: 1px solid #ece8e8;
 }
 
-.pager {
-    margin-top: 20px;
+.pagination {
+    padding: 14px;
+    justify-content: flex-end;
 }
 </style>
