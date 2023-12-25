@@ -31,7 +31,9 @@
     <div class="base-table">
         <div class="action">
             <el-button size="small" type="primary">新增</el-button>
-            <el-button size="small" type="danger" @click="handleBatchDelete">批量删除</el-button>
+            <el-button size="small" type="danger" @click="handleBatchDelete"
+                >批量删除</el-button
+            >
         </div>
         <el-table
             :data="tableData"
@@ -44,6 +46,8 @@
                 v-for="item in columns"
                 :prop="item.prop"
                 :label="item.label"
+                :formatter="item.formatter"
+                :width="item.width"
             ></el-table-column>
             <el-table-column label="操作" width="140">
                 <template #default="scope">
@@ -70,6 +74,7 @@
 <script setup>
 import { ref, reactive } from "vue";
 import { ElMessage } from "element-plus";
+import _ from "lodash";
 
 import { usersList, usersDelete } from "../api/index";
 const user = reactive({
@@ -87,13 +92,41 @@ const pager = reactive({
 const chooseRows = ref([]);
 // TODO   width="180"
 const columns = reactive([
-    { label: "用户ID", prop: "userId" },
-    { label: "用户名", prop: "userName" },
+    { label: "用户ID", prop: "userId", width: 90 },
+    { label: "用户名", prop: "userName", width: 80 },
     { label: "用户邮箱", prop: "userEmail" },
-    { label: "用户角色", prop: "role" },
-    { label: "用户状态", prop: "state" },
-    { label: "注册时间", prop: "createTime" },
-    { label: "最后登录时间", prop: "lastLoginTime" },
+    {
+        label: "用户角色",
+        prop: "role",
+        formatter(row, column, value) {
+            return { 1: "系统管理员", 2: "普通用户" }[value];
+        },
+        width: 80,
+    },
+    {
+        label: "用户状态",
+        prop: "state",
+        formatter(row, column, value) {
+            return { 1: "在职", 2: "离职", 3: "试用期" }[value];
+        },
+        width: 80,
+    },
+    {
+        label: "注册时间",
+        prop: "createTime",
+        formatter(row, column, value) {
+            let time = new Date(value);
+            return time.toLocaleString();
+        },
+    },
+    {
+        label: "最后登录时间",
+        prop: "lastLoginTime",
+        formatter(row, column, value) {
+            let time = new Date(value);
+            return time.toLocaleString();
+        },
+    },
 ]);
 
 /**
@@ -124,9 +157,9 @@ function handleCurrentChange(val) {
 async function handleDelete(data) {
     console.log(data);
     let userIds;
-    if(data instanceof Array) {
-        if(data.length == 0) return;
-        userIds = data;
+    if (data instanceof Array) {
+        if (data.length == 0) return;
+        userIds = data;``
     } else {
         userIds = [data];
     }
@@ -152,7 +185,7 @@ function handleSelectChange(list) {
 }
 
 function handleBatchDelete() {
-    const list = chooseRows.value.map(item => item.userId);
+    const list = chooseRows.value.map((item) => item.userId);
     handleDelete(list);
 }
 
