@@ -79,7 +79,7 @@
 
     <el-dialog
         v-model="dialogFormVisible"
-        :title="dialogFormTitle"
+        :title="dialogInfo[dialogType]"
         :close-on-click-modal="false"
     >
         <el-form
@@ -89,10 +89,18 @@
             label-width="100px"
         >
             <el-form-item label="用户名" prop="userName">
-                <el-input v-model="dialogForm.userName" autocomplete="off" />
+                <el-input
+                    v-model="dialogForm.userName"
+                    :disabled="dialogType == 'edit'"
+                    autocomplete="off"
+                />
             </el-form-item>
             <el-form-item label="邮箱" prop="userEmail">
-                <el-input v-model="dialogForm.userEmail" autocomplete="off">
+                <el-input
+                    v-model="dialogForm.userEmail"
+                    :disabled="dialogType == 'edit'"
+                    autocomplete="off"
+                >
                     <template #append>@qq.com</template>
                 </el-input>
             </el-form-item>
@@ -109,9 +117,9 @@
                     <el-option label="试用期" :value="3" />
                 </el-select>
             </el-form-item>
-            <el-form-item label="系统角色" prop="role">
+            <el-form-item label="系统角色" prop="roleList">
                 <el-select
-                    v-model="dialogForm.role"
+                    v-model="dialogForm.roleList"
                     placeholder="请选择系统角色"
                     multiple
                     style="width: 100%"
@@ -129,8 +137,9 @@
                     v-model="dialogForm.deptId"
                     :options="dialogDept.options"
                     :props="dialogDept.props"
-                    @change="handleDeptChange"
                     style="width: 100%"
+                    placeholder="请选择部门"
+                    @change="handleDeptChange"
                 />
             </el-form-item>
         </el-form>
@@ -173,7 +182,6 @@ const pager = reactive({
     total: 0,
 });
 const chooseRows = ref([]);
-// TODO   width="180"
 const columns = reactive([
     { label: "用户ID", prop: "userId", width: 90 },
     { label: "用户名", prop: "userName", width: 80 },
@@ -273,9 +281,7 @@ function handleBatchDelete() {
     handleDelete(list);
 }
 
-/*
-    -------------- 编辑和新增功能 --------------
-*/
+// #region 编辑和新增功能 START
 let dialogForm = reactive({
     state: 3,
 });
@@ -290,11 +296,15 @@ const dialogFormRules = ref({
         { required: true, message: "请输入手机号", trigger: "blur" },
         { pattern: /1\d{10}/, message: "手机号格式不正确", trigger: "blur" },
     ],
-    role: [{ required: true, message: "请选择系统角色", trigger: "blur" }],
+    roleList: [{ required: true, message: "请选择系统角色", trigger: "blur" }],
     deptId: [{ required: true, message: "请选择部门", trigger: "blur" }],
 });
 const dialogFormRef = ref();
-const dialogFormTitle = ref("");
+const dialogInfo = {
+    edit: "用户编辑",
+    create: "用户新增",
+};
+const dialogType = ref("create");
 const dialogDept = reactive({
     props: {
         expandTrigger: "hover",
@@ -311,12 +321,10 @@ async function handleDialog(row) {
     await getRolesList();
     await getDeptList();
     if (row) {
-        // TODO row 填充到表单
-        dialogFormTitle.value = "编辑";
-        console.log("编辑");
+        Object.assign(dialogForm, row);
+        dialogType.value = "edit";
     } else {
-        dialogFormTitle.value = "新增";
-        console.log("新增");
+        dialogType.value = "create";
     }
 }
 
@@ -324,8 +332,7 @@ async function handleDialog(row) {
  * 重置dialog弹框中的Form
  */
 function handleDialogReset() {
-    if (!dialogFormRef.value) return;
-    dialogFormRef.value.resetFields();
+    handleReset(dialogFormRef.value);
 }
 async function handleDialogSubmit(elForm) {
     if (!elForm) return;
@@ -336,7 +343,7 @@ async function handleDialogSubmit(elForm) {
             const { code, data } = await userCreate(params);
             if (code == 200) {
                 dialogFormVisible.value = false;
-                ElMessage.success(data);
+                ElMessage.success(`${dialogInfo[dialogType.value]}成功！`);
                 getUsersList();
             } else {
                 ElMessage.error(data);
@@ -361,6 +368,8 @@ async function getDeptList() {
         dialogDept.options.push(...data);
     }
 }
+
+// #endregion 编辑和新增功能 END
 
 getUsersList();
 </script>
