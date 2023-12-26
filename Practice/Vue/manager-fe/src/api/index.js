@@ -21,3 +21,15 @@ export function usersList(params) {
 export function usersDelete(params) {
     return request.post("/users/delete", params, true);
 }
+
+export function rolesList() {
+    return request.get("/roles/list", true);
+}
+
+export function deptList() {
+    return request.get("/dept/list", true); 
+}
+
+export function userCreate(params) {
+    return request.post("/users/create", params, true);
+}
