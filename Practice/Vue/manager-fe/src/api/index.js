@@ -30,6 +30,7 @@ export function deptList() {
     return request.get("/dept/list", true); 
 }
 
-export function userCreate(params) {
-    return request.post("/user/create", params, true);
+// 编辑 && 新增
+export function userOperate(params) {
+    return request.post("/user/operate", params);
 }

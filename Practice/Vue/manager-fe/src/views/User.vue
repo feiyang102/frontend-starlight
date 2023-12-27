@@ -167,12 +167,12 @@ import {
     usersDelete,
     rolesList,
     deptList,
-    userCreate,
+    userOperate,
 } from "../api/index";
 const user = reactive({
     userId: "",
     userName: "",
-    state: 0,
+    state: 1,
 });
 const ruleFormRef = ref();
 const tableData = ref([]);
@@ -340,7 +340,8 @@ async function handleDialogSubmit(elForm) {
         if (valid) {
             const params = toRaw(dialogForm);
             params.userEmail += "@qq.com";
-            const { code, data } = await userCreate(params);
+            params.action = dialogType.value;
+            const { code, data } = await userOperate(params);
             if (code == 200) {
                 dialogFormVisible.value = false;
                 ElMessage.success(`${dialogInfo[dialogType.value]}成功！`);

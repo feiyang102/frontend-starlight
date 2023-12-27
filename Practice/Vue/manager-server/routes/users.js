@@ -76,9 +76,43 @@ router.post("/delete", async (ctx) => {
         { state: 2 }
     );
     if (res.modifiedCount) {
-        ctx.body = util.success(
-            `删除成功，修改${res.modifiedCount}条数据`
+        ctx.body = util.success(`删除成功，修改${res.modifiedCount}条数据`);
+    }
+});
+
+router.post("/operate", async (ctx) => {
+    const {
+        userId,
+        userName,
+        userEmail,
+        mobile,
+        job,
+        state,
+        roleList,
+        deptId,
+        action,
+    } = ctx.request.body;
+
+    if (action === "create") {
+        if (!userName || !userEmail || !deptId) {
+            ctx.body = util.fail("员工昵称/邮箱/部门未填写");
+            return;
+        }
+    }
+    if (action === "edit") {
+        if (!deptId) {
+            ctx.body = util.fail("员工部门未填写");
+            return;
+        }
+        const res = await User.findOneAndUpdate(
+            { userId },
+            { mobile, job, state, roleList, deptId }
         );
+        if (res) {
+            console.log("用户编辑：", res);
+            ctx.body = util.success(res.userName, "修改成功");
+            return;
+        }
     }
 });
 
