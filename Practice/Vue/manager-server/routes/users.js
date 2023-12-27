@@ -7,10 +7,13 @@ const jwt = require("jsonwebtoken");
 router.prefix("/user");
 router.post("/login", async (ctx, next) => {
     const { userName, password } = ctx.request.body;
-    const res = await User.findOne({
-        userName,
-        password,
-    }, "userName");// 如果有数据，只查询userName ，这样就不会在前端返回password等信息
+    const res = await User.findOne(
+        {
+            userName,
+            password,
+        },
+        "userName"
+    ); // 如果有数据，只查询userName ，这样就不会在前端返回password等信息
 
     const data = res && res._doc;
 
@@ -19,7 +22,7 @@ router.post("/login", async (ctx, next) => {
             data,
         },
         "feiyang",
-        { expiresIn: 30 }
+        { expiresIn: 3000 }
     );
 
     if (data) {
@@ -28,6 +31,30 @@ router.post("/login", async (ctx, next) => {
     } else {
         ctx.body = util.fail("账号或者密码错误！");
     }
+});
+
+router.get("/list", async (ctx) => {
+    const { userId, userName, state, pageNum, pageSize } = ctx.request.query;
+    const { page, skipIndex } = util.pager(pageNum, pageSize);
+
+    // 格式化参数
+    const params = {};
+    if (userId) params.userId = userId;
+    if (userName) params.userName = userName;
+    if (state && state != "0") params.state = state;
+
+    // 根据条件查询用户列表
+    const list = await User.find(params, { password: 0 })
+        .skip(skipIndex)
+        .limit(pageSize);
+    const total = await User.countDocuments(params);
+    ctx.body = util.success({
+        page: {
+            ...page,
+            total,
+        },
+        list,
+    });
 });
 
 module.exports = router;

@@ -15,11 +15,11 @@ export function getMenuList() {
 }
 
 export function usersList(params) {
-    return request.get("/users/list", params, true);
+    return request.get("/user/list", params);
 }
 
 export function usersDelete(params) {
-    return request.post("/users/delete", params, true);
+    return request.post("/user/delete", params, true);
 }
 
 export function rolesList() {
@@ -31,5 +31,5 @@ export function deptList() {
 }
 
 export function userCreate(params) {
-    return request.post("/users/create", params, true);
+    return request.post("/user/create", params, true);
 }
