@@ -15,6 +15,8 @@ const userSchema = mongoose.Schema({
         default: 1, // 1系统管理员、2普通用户
     },
     roleList: [],
+    deptId: [],
+    password: String,
     createTime: {
         type: Date,
         default: new Date(),

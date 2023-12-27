@@ -1,7 +1,9 @@
 const router = require("koa-router")();
 const User = require("../models/userSchema");
+const Counter = require("../models/counterSchema");
 const util = require("../utils");
 const jwt = require("jsonwebtoken");
+const md5 = require("md5");
 
 // 二级路由
 router.prefix("/user");
@@ -10,7 +12,7 @@ router.post("/login", async (ctx, next) => {
     const res = await User.findOne(
         {
             userName,
-            password,
+            password: md5(password),
         },
         "userName"
     ); // 如果有数据，只查询userName ，这样就不会在前端返回password等信息
@@ -92,16 +94,52 @@ router.post("/operate", async (ctx) => {
         deptId,
         action,
     } = ctx.request.body;
-
     if (action === "create") {
         if (!userName || !userEmail || !deptId) {
             ctx.body = util.fail("员工昵称/邮箱/部门未填写");
             return;
         }
+
+        // 自增
+        const { sequence_value } = await Counter.findOneAndUpdate(
+            { _id: "productid" },
+            { $inc: { sequence_value: 1 } },
+            { new: true }
+        );
+
+        // 去重
+        const res = await User.findOne(
+            {
+                $or: [{ userName }, { userEmail }, { mobile }],
+            }
+        );
+        if (res) {
+            console.log(res);
+            ctx.body = util.fail(
+                "用户名/邮箱/手机号码已被注册",
+                util.CODE.BUSINESS_ERROR
+            );
+        } else {
+            // const psd = mobile.substring(5, 11);
+            const user = new User({
+                userId: sequence_value,
+                userName,
+                userEmail,
+                mobile,
+                job,
+                state,
+                roleList,
+                deptId,
+                role: 1, // 默认都是普通用户
+                password: md5(111111),
+            });
+            user.save();
+            ctx.body = util.success("用户创建成功");
+        }
     }
     if (action === "edit") {
         if (!deptId) {
-            ctx.body = util.fail("员工部门未填写");
+            ctx.body = util.fail("员工部门未填写", util.CODE.BUSINESS_ERROR);
             return;
         }
         const res = await User.findOneAndUpdate(

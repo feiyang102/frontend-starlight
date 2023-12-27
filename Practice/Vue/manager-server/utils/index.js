@@ -30,4 +30,5 @@ module.exports = {
     fail(msg = "", code = CODE.USER_ACOUNT_ERROR) {
         return { msg, code };
     },
+    CODE
 };
