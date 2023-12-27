@@ -19,7 +19,7 @@ export function usersList(params) {
 }
 
 export function usersDelete(params) {
-    return request.post("/user/delete", params, true);
+    return request.post("/user/delete", params);
 }
 
 export function rolesList() {

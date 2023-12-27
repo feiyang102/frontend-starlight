@@ -57,4 +57,29 @@ router.get("/list", async (ctx) => {
     });
 });
 
+router.post("/delete", async (ctx) => {
+    // await User.updateOne({ userId }, { userName: "阿飞" });
+
+    // updateMany 批量更新支持 $or 过滤
+    // await User.updateMany(
+    //     { $or: [{ userId: 100001 }, { userId: 100002 }] },
+    //     { state: 2 }
+    // );
+    // updateMany 批量更新支持 $in 过滤
+    // await User.updateMany({ userId: { $in: [100001, 100002] } }, { state: 2 });
+    // ctx.body = util.success(res);
+
+    // POST 要在 request.body 中获取数据，GET请求使用的是ctx.request.query
+    const { userIds } = ctx.request.body;
+    const res = await User.updateMany(
+        { userId: { $in: userIds } },
+        { state: 2 }
+    );
+    if (res.modifiedCount) {
+        ctx.body = util.success(
+            `删除成功，修改${res.modifiedCount}条数据`
+        );
+    }
+});
+
 module.exports = router;
