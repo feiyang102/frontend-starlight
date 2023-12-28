@@ -9,6 +9,7 @@ const logger2 = require('./utils/logger')
 
 const index = require('./routes/index')
 const users = require('./routes/users')
+require("./config/db")
 
 // error handler
 onerror(app)

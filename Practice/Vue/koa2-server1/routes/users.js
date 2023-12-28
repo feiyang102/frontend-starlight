@@ -1,9 +1,14 @@
 const router = require('koa-router')()
+const User = require("../models/userSchema")
 
 router.prefix('/users')
 
-router.get('/', function (ctx, next) {
-  ctx.body = 'this is a users response!'
+router.get('/', async function (ctx, next) {
+  // ctx.body = 'this is a users response!'
+  const res = await User.findOne({
+    userName: "admin"
+  })
+  ctx.body = res;
 })
 
 router.get('/bar', function (ctx, next) {
