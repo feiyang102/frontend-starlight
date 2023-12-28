@@ -44,13 +44,13 @@ app.use(async (ctx, next) => {
 
 // jwt 验证接口
 app.use(jwt({ secret: "feiyang" }).unless({
-    path: ["/api/user/login"]
+    path: ["/api/user/login", "/api/notify/count"]
 }));
 
 //一级路由
 router.prefix("/api");
 router.get("/notify/count", (ctx) => {
-    ctx.body = "body";
+    ctx.body = "接口通了";
 });
 
 router.use(users.routes());
