@@ -6,6 +6,7 @@ const onerror = require('koa-onerror')
 const bodyparser = require('koa-bodyparser')
 const logger = require('koa-logger')
 const logger2 = require('./utils/logger')
+const router = require('koa-router')()
 
 const index = require('./routes/index')
 const users = require('./routes/users')
@@ -35,8 +36,11 @@ app.use(async (ctx, next) => {
 })
 
 // routes
-app.use(index.routes(), index.allowedMethods())
-app.use(users.routes(), users.allowedMethods())
+router.prefix('/api')
+router.use(users.routes());
+router.use(index.routes());
+app.use(router.routes())
+app.use(router.routes())
 
 // error-handling
 app.on('error', (err, ctx) => {
