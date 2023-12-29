@@ -8,6 +8,7 @@ const logger = require("koa-logger");
 const logger2 = require("./utils/logger");
 const jwt = require("koa-jwt");
 const router = require("koa-router")();
+const utils = require("./utils");
 
 const index = require("./routes/index");
 const users = require("./routes/users");
@@ -39,7 +40,7 @@ app.use(async (ctx, next) => {
     const start = new Date();
     await next().catch((error) => {
         if (error.status === 401) {
-            ctx.body = util.fail("token令牌未携带或已过期", 50001);
+            ctx.body = utils.fail("token令牌未携带或已过期", 50001);
         }
     });
 
