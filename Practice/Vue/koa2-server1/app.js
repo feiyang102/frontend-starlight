@@ -6,10 +6,13 @@ const onerror = require('koa-onerror')
 const bodyparser = require('koa-bodyparser')
 const logger = require('koa-logger')
 const logger2 = require('./utils/logger')
+const jwt = require('koa-jwt')
 const router = require('koa-router')()
 
 const index = require('./routes/index')
 const users = require('./routes/users')
+const login = require('./routes/login')
+const jwtSecretKey = require('./config')["jwtSecretKey"]
 require("./config/db")
 
 // error handler
@@ -30,16 +33,25 @@ app.use(views(__dirname + '/views', {
 // logger
 app.use(async (ctx, next) => {
   const start = new Date()
-  await next()
+  await next().catch((error) => {
+      if(error.status === 401) {
+          ctx.body = util.fail("token令牌未携带或已过期", 50001);
+      }
+  })
+  
   const ms = new Date() - start
   console.log(`${ctx.method} ${ctx.url} - ${ms}ms`)
 })
 
+app.use(jwt({ secret: jwtSecretKey }).unless({
+  path: ["/api/login", "/api/verify2"]
+}));
+
 // routes
 router.prefix('/api')
-router.use(users.routes());
 router.use(index.routes());
-app.use(router.routes())
+router.use(users.routes());
+router.use(login.routes())
 app.use(router.routes())
 
 // error-handling
