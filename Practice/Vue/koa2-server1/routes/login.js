@@ -17,7 +17,9 @@ router.post("/login", async (ctx, next) => {
 
     const data = res._doc;
     const userPayload = { data };
-    const token = await jwt.sign(userPayload, jwtSecretKey, { expiresIn: "1h" });
+    const token = await jwt.sign(userPayload, jwtSecretKey, {
+        expiresIn: "1h",
+    });
 
     if (res) {
         data.token = `Bearer ${token}`;
@@ -29,7 +31,7 @@ router.post("/login", async (ctx, next) => {
 
 // 使用 jsonwebtoken 做校验
 router.get("/verify", (ctx, next) => {
-    console.log("koa-jwt 校验成功")
+    console.log("koa-jwt 校验成功");
     // 手动解析 jwt 中的信息
     const token = ctx.request.headers.authorization?.split(" ")[1];
     const data = jwt.verify(token, jwtSecretKey);
