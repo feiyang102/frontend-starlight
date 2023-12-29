@@ -54,5 +54,4 @@ router.post("/create", async (ctx) => {
     ctx.body = utils.success("用户创建成功");
 });
 
-
 module.exports = router;
