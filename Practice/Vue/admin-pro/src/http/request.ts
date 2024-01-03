@@ -1,6 +1,6 @@
 import axios from "axios";
 const service = axios.create({
-    baseURL: "/",
+    baseURL: import.meta.env.VITE_APP_BASE_API,
     timeout: 15000,
 });
 
@@ -19,7 +19,9 @@ service.interceptors.response.use(
     (response) => {
         return response.data;
     },
-    (error) => {}
+    (error) => {
+        console.log(error);
+    }
 );
 
 export default service;
