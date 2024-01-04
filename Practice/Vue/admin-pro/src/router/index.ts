@@ -1,5 +1,5 @@
-import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
-import NProgress from "nprogress";
+import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router';
+import NProgress from 'nprogress';
 
 // const routes: Array<RouteRecordRaw> = [
 //     {
@@ -13,16 +13,16 @@ import NProgress from "nprogress";
 
 // 功能路由
 export const aboutRouter = {
-    path: "/about",
-    name: "about",
-    component: () => import("@/views/about/index.vue"),
+    path: '/about',
+    name: 'about',
+    component: () => import('@/views/about/index.vue'),
     meta: {},
-    children: [],
+    children: []
 } as RouteRecordRaw;
 
 // 业务路由
-const modules: Record<string, any> = import.meta.glob("./modules/*.ts", {
-    eager: true,
+const modules: Record<string, any> = import.meta.glob('./modules/*.ts', {
+    eager: true
 });
 
 // 路由配置
@@ -35,9 +35,8 @@ routes.push(aboutRouter);
 
 const router = createRouter({
     history: createWebHashHistory(),
-    routes,
+    routes
 });
-
 
 router.beforeEach(async (_to, _from, next) => {
     //TODO 加载进度条未调试
@@ -45,7 +44,7 @@ router.beforeEach(async (_to, _from, next) => {
     next();
 });
 
-router.afterEach((_to) => {
+router.afterEach(() => {
     NProgress.done();
 });
 

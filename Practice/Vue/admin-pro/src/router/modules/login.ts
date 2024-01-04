@@ -4,4 +4,4 @@ export default {
     component: () => import('@/views/login/index.vue'),
     meta: {},
     children: []
-}
+};
