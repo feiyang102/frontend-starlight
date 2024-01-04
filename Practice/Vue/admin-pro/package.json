@@ -5,7 +5,8 @@
     "main": "index.js",
     "scripts": {
         "dev": "vite --mode development",
-        "build": "vite build"
+        "build": "vite build",
+        "lint:eslint": "eslint --cache --max-warnings 0 {src,mock}/**/*.{vue,ts,tsx} --fix"
     },
     "author": "",
     "license": "ISC",
@@ -19,10 +20,15 @@
         "vue-router": "^4.2.5"
     },
     "devDependencies": {
+        "@eslint/create-config": "^0.4.6",
         "@types/node": "^20.10.6",
         "@types/nprogress": "^0.2.3",
+        "@typescript-eslint/eslint-plugin": "^6.17.0",
+        "@typescript-eslint/parser": "^6.17.0",
         "@vitejs/plugin-vue": "^5.0.2",
         "@vitejs/plugin-vue-jsx": "^3.1.0",
+        "eslint": "^8.56.0",
+        "eslint-plugin-vue": "^9.19.2",
         "less": "^4.2.0",
         "typescript": "^5.3.3",
         "vite": "^5.0.10",
