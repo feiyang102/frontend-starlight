@@ -23,12 +23,10 @@ module.exports = {
     ignoreFiles: ['**/*.js', '**/*.jsx', '**/*.tsx', '**/*.ts', '**/*.json', '**/*.md', '**/*.yaml'],
     // 自定义配置规则
     rules: {
-        indentation: null,
         // 便于配置变量 关闭未知属性检测
         'property-no-unknown': null,
         // 指定类选择器的模式
-        'selector-class-pattern': null,
-        // 允许 Vue 的 global
+        'selector-class-pattern': null,        // 允许 Vue 的 global
         'selector-pseudo-class-no-unknown': [
             true,
             {
