@@ -7,7 +7,9 @@
         "dev": "vite --mode development",
         "build": "vite build",
         "lint:eslint": "eslint --cache --max-warnings 0 {src,mock}/**/*.{vue,ts,tsx} --fix",
-        "lint:prettier": "prettier --write **/*.{js,json,tsx,css,less,scss,vue,html,md}"
+        "lint:prettier": "prettier --write **/*.{js,json,tsx,css,less,scss,vue,html,md}",
+        "lint:lint-staged": "lint-staged",
+        "prepare": "husky install"
     },
     "author": "",
     "license": "ISC",
@@ -21,6 +23,8 @@
         "vue-router": "^4.2.5"
     },
     "devDependencies": {
+        "@commitlint/cli": "^18.4.4",
+        "@commitlint/config-conventional": "^18.4.4",
         "@eslint/create-config": "^0.4.6",
         "@types/node": "^20.10.6",
         "@types/nprogress": "^0.2.3",
@@ -32,10 +36,37 @@
         "eslint-config-prettier": "^9.1.0",
         "eslint-plugin-prettier": "^5.1.2",
         "eslint-plugin-vue": "^9.19.2",
+        "husky": "^8.0.3",
         "less": "^4.2.0",
+        "lint-staged": "^15.2.0",
         "prettier": "^3.1.1",
+        "stylelint-less": "^3.0.1",
         "typescript": "^5.3.3",
         "vite": "^5.0.10",
         "vue-tsc": "^1.8.27"
+    },
+    "lint-staged": {
+        "*.{js,jsx,ts,tsx}": [
+            "eslint --fix",
+            "prettier --write"
+        ],
+        "{!(package)*.json,*.code-snippets,.!(browserslist)*rc}": [
+            "prettier --write--parser json"
+        ],
+        "package.json": [
+            "prettier --write"
+        ],
+        "*.vue": [
+            "eslint --fix",
+            "prettier --write",
+            "stylelint --fix"
+        ],
+        "*.{scss,less,styl,html}": [
+            "stylelint --fix",
+            "prettier --write"
+        ],
+        "*.md": [
+            "prettier --write"
+        ]
     }
 }
