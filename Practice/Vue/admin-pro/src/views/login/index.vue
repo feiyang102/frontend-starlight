@@ -3,10 +3,19 @@
 </template>
 
 <script lang="ts" setup>
-// import { reactive, toRefs, ref, onBeforeMount, onMounted } from "vue";
-// import { useUserStore } from '@/store/user';
+import { userLogin, LoginRequest } from '@/api/user';
 
-// const userStore = useUserStore();
+const userInfo: LoginRequest = {
+    password: 'admin',
+    username: 'admin'
+};
+userLogin(userInfo)
+    .then((res) => {
+        console.log(res);
+    })
+    .catch((err) => {
+        console.log(err);
+    });
 </script>
 
 <style scoped></style>
