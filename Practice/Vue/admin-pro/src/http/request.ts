@@ -1,11 +1,6 @@
-import axios, {
-    AxiosError,
-    AxiosResponse,
-    InternalAxiosRequestConfig,
-    AxiosRequestConfig,
-} from "axios";
-import { ElMessage } from "element-plus";
-import { getMessageInfo } from "./status";
+import axios, { AxiosError, AxiosResponse, InternalAxiosRequestConfig, AxiosRequestConfig } from 'axios';
+import { ElMessage } from 'element-plus';
+import { getMessageInfo } from './status';
 
 interface BaseResponse<T = any> {
     code: number | string;
@@ -14,8 +9,10 @@ interface BaseResponse<T = any> {
 }
 
 const service = axios.create({
-    baseURL: import.meta.env.VITE_APP_BASE_API,
-    timeout: 15000,
+    baseURL: import.meta.env.VITE_APP_DEV_USE_MOCK
+        ? import.meta.env.VITE_APP_MOCK_BASEURL
+        : import.meta.env.VITE_APP_API_BASEURL,
+    timeout: 15000
 });
 
 // 请求拦截器
@@ -35,7 +32,7 @@ service.interceptors.response.use(
             return response.data;
         }
         ElMessage({
-            message: getMessageInfo(response.status),
+            message: getMessageInfo(response.status)
         });
         return response.data;
     },
@@ -44,13 +41,13 @@ service.interceptors.response.use(
         if (response) {
             ElMessage({
                 message: getMessageInfo(response.status),
-                type: "error",
+                type: 'error'
             });
             return Promise.reject(response.data);
         }
         ElMessage({
-            message: "网络连接异常，请稍后重试！",
-            type: "error",
+            message: '网络连接异常，请稍后重试！',
+            type: 'error'
         });
     }
 );
@@ -60,60 +57,42 @@ service.interceptors.response.use(
 const requestInstance = <T = any>(config: AxiosRequestConfig): Promise<T> => {
     const conf = config;
     return new Promise((resolve, reject) => {
-        service
-            .request<any, AxiosResponse<BaseResponse>>(conf)
-            .then((res: AxiosResponse<BaseResponse>) => {
-                const data = res.data;
-                // 如果data.code为错误代码返回message信息
-                if (data.code != 0) {
-                    ElMessage({
-                        message: data.message,
-                        type: "error",
-                    });
-                    reject(data.message);
-                } else {
-                    ElMessage({
-                        message: data.message,
-                        type: "success",
-                    });
-                    // 此处返回data信息 也就是 api 中配置好的 Response类型
-                    resolve(data.data as T);
-                }
-            });
+        service.request<any, AxiosResponse<BaseResponse>>(conf).then((res: AxiosResponse<BaseResponse>) => {
+            const data = res.data;
+            // 如果data.code为错误代码返回message信息
+            if (data.code != 0) {
+                ElMessage({
+                    message: data.message,
+                    type: 'error'
+                });
+                reject(data.message);
+            } else {
+                ElMessage({
+                    message: data.message,
+                    type: 'success'
+                });
+                // 此处返回data信息 也就是 api 中配置好的 Response类型
+                resolve(data.data as T);
+            }
+        });
     });
 };
 
 // 在最后使用封装过的axios导出不同的请求方式
-export function get<T = any, U = any>(
-    config: AxiosRequestConfig,
-    url: string,
-    parms?: U
-): Promise<T> {
-    return requestInstance({ ...config, url, method: "GET", params: parms });
+export function get<T = any, U = any>(config: AxiosRequestConfig, url: string, parms?: U): Promise<T> {
+    return requestInstance({ ...config, url, method: 'GET', params: parms });
 }
 
-export function post<T = any, U = any>(
-    config: AxiosRequestConfig,
-    url: string,
-    data: U
-): Promise<T> {
-    return requestInstance({ ...config, url, method: "POST", data: data });
+export function post<T = any, U = any>(config: AxiosRequestConfig, url: string, data: U): Promise<T> {
+    return requestInstance({ ...config, url, method: 'POST', data: data });
 }
 
-export function put<T = any, U = any>(
-    config: AxiosRequestConfig,
-    url: string,
-    data: U
-): Promise<T> {
-    return requestInstance({ ...config, url, method: "PUT", data: data });
+export function put<T = any, U = any>(config: AxiosRequestConfig, url: string, data: U): Promise<T> {
+    return requestInstance({ ...config, url, method: 'PUT', data: data });
 }
 
-export function del<T = any, U = any>(
-    config: AxiosRequestConfig,
-    url: string,
-    data: U
-): Promise<T> {
-    return requestInstance({ ...config, url, method: "DELETE", data: data });
+export function del<T = any, U = any>(config: AxiosRequestConfig, url: string, data: U): Promise<T> {
+    return requestInstance({ ...config, url, method: 'DELETE', data: data });
 }
 
 export default service;
