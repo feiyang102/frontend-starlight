@@ -1,5 +1,11 @@
 import { defineConfig, loadEnv } from 'vite';
 import type { UserConfig, ConfigEnv } from 'vite';
+import AutoImport from 'unplugin-auto-import/vite';
+import Icons from 'unplugin-icons/vite';
+import Components from 'unplugin-vue-components/vite';
+import IconsResolver from 'unplugin-icons/resolver';
+import ElementPlus from 'unplugin-element-plus/vite';
+import { ElementPlusResolver } from 'unplugin-vue-components/resolvers';
 import { viteMockServe } from 'vite-plugin-mock';
 import { fileURLToPath } from 'url';
 import vue from '@vitejs/plugin-vue';
@@ -26,6 +32,27 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
                 // 如果接口为 /mock/xxx 以 mock 开头就会被拦截响应配置的内容
                 mockPath: 'mock', // 数据模拟需要拦截的请求起始 URL
                 enable: true // 本地开发是否启用
+            }),
+            // 开启 ElementPlus 自动引入 CSS
+            ElementPlus({}),
+            // 自动导入组件
+            AutoImport({
+                // 定义需要自动引入的框架
+                imports: ['vue', 'vue-router', 'pinia'],
+                // 处理 eslint
+                eslintrc: {
+                    enabled: true
+                },
+                resolvers: [ElementPlusResolver(), IconsResolver()],
+                dts: fileURLToPath(new URL('./types/auto-imports.d.ts', import.meta.url))
+            }),
+            // 自动注册组件
+            Components({
+                resolvers: [ElementPlusResolver(), IconsResolver()],
+                dts: fileURLToPath(new URL('./types/components.d.ts', import.meta.url))
+            }),
+            Icons({
+                autoInstall: true
             })
         ],
         // 运行后本地预览的服务器
