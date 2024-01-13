@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>内存泄漏测试</title>
+</head>
+
+<body>
+  <div>测试</div>
+  <script>
+    // 内存泄漏测试代码
+    function run() {
+      let param1 = "测试";
+      let bigArr = new Array(10000000);
+      function func1() {
+        console.log('此时我们仍然可以使用控制台访问到 bigArr');
+        debugger;
+      }
+      function func2() {
+        console.log(bigArr);
+      }
+      return { func1, func2, hello: bigArr };
+    }
+    let res = run();
+    delete res.func2;
+    res.func1();
+    console.log('词法环境中bigArr无法访问，但是未销毁');
+    delete res.func1;
+    console.log('词法环境中仍然有bigArr，因为词法环境仍然被占用');
+    delete res.hello;
+    console.log('此时bigArr被回收');
+  </script>
+</body>
+
+</html>
