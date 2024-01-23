@@ -1,10 +1,34 @@
 <script setup>
-import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
+// import { RouterLink, RouterView } from 'vue-router'
+// import HelloWorld from './components/HelloWorld.vue'
+import { reactive } from 'vue'
+
+const child_apps = {
+  react: {
+    name: 'react',
+    url: 'http://localhost:4001/',
+    iframe: false
+  },
+  vue3: {
+    name: 'vue3',
+    url: 'http://localhost:4002/',
+    iframe: true
+  }
+}
+const current_app = reactive(child_apps.react)
+
+const changeApp = (appKey) => {
+  console.log(appKey)
+  const app = child_apps[appKey]
+  if (!app) return
+  current_app.name = app.name
+  current_app.url = app.url
+  current_app.iframe = app.iframe
+}
 </script>
 
 <template>
-  <header>
+  <!-- <header>
     <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
 
     <div class="wrapper">
@@ -15,13 +39,30 @@ import HelloWorld from './components/HelloWorld.vue'
         <RouterLink to="/about">About</RouterLink>
       </nav>
     </div>
-  </header>
+  </header> -->
 
-  <RouterView />
+  <!-- <RouterView /> -->
+  <div class="main-app">
+    <div class="main_buttons">
+      <button @click="changeApp('react')">react</button>
+      <button @click="changeApp('vue3')">vue3</button>
+    </div>
+    <div class="child_apps">
+      <micro-app
+        :name="current_app.name"
+        :url="current_app.url"
+        :iframe="current_app.iframe"
+      ></micro-app>
+    </div>
+  </div>
 </template>
 
 <style scoped>
-header {
+.main-app {
+  display: flex;
+  flex-flow: column;
+}
+/* header {
   line-height: 1.5;
   max-height: 100vh;
 }
@@ -81,5 +122,5 @@ nav a:first-of-type {
     padding: 1rem 0;
     margin-top: 1rem;
   }
-}
+} */
 </style>
