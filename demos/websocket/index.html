@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>websoket test</title>
+</head>
+<script>
+  /*
+  const server = new WebSocket.Server({ port: 8080 });
+
+  server.on('connection', (socket) => {
+    console.log('Client connected');
+
+    // 发送欢迎消息给客户端
+    socket.send('Welcome to the WebSocket server!');
+
+    // 监听客户端发来的消息
+    socket.on('message', (message) => {
+      console.log(`Received message: ${message}`);
+      socket.send(`You said: ${message}`);
+    });
+
+    // 客户端断开连接时触发
+    socket.on('close', () => {
+      console.log('Client disconnected');
+    });
+  });
+
+  console.log('WebSocket server is running on port 8080');
+  */
+</script>
+<script>
+  let socket = null;
+  function wsConnection() {
+    socket = new WebSocket('ws://localhost:3001');
+    socket.addEventListener('open', (event) => {
+      console.log('WebSocket connection opened:', event);
+      socket.send('Hello, WebSocket server!');
+    });
+
+    socket.addEventListener('message', (event) => {
+      console.log('WebSocket message received:', event.data);
+    });
+
+    socket.addEventListener('close', (event) => {
+      console.log('WebSocket connection closed:', event);
+    });
+  }
+  function wsSend1() {
+    socket.send('Hello wsSend1');
+  }
+  function wsSend2() {
+    socket.send('Hello wsSend2');
+  }
+  function wsClose() {
+    socket.close();
+    socket = null;
+  }
+</script>
+
+<body>
+  <button onclick="wsConnection()">建立websoket</button>
+  <button onclick="wsSend1()">发送单个请求</button>
+  <button onclick="wsSend2()">发送多个请求</button>
+  <button onclick="wsClose()">断开websoket</button>
+</body>
+
+</html>
