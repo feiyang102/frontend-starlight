@@ -14,13 +14,13 @@ server.on('connection', (socket) => {
     socket.send(`You said: ${message}`);
   });
 
-  // 客户端断开连接时触发
+  // 客户端断开连接时触发，客户端可以主动断开触发，也可以通过关闭页面触发
   socket.on('close', () => {
     console.log('Client disconnected');
   });
 
   setInterval(() => {
-    socket.send('socket 定时发送消息');
+    socket.send('socket 服务端定时主动发送消息');
   }, 3000);
 });
 
