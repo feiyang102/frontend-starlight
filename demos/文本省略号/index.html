@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>纯CSS实现文本超出时，中间显示省略号</title>
+</head>
+
+<body>
+  <p>原理</p>
+  <p>txt和title是流式布局，title根据当前位置偏移到txt上面一行</p>
+  <p>当txt一行显示时，此时title刚好在其上面一行，因为li超出隐藏</p>
+  <p>当txt换行时，title自然就会因为txt向下多占用一行而改变title文档流所在位置，使其下移一行，此时刚好让title的实际文字下移一行，盖到txt第一行的上面</p>
+  <p>这样就实现了不超出时显示txt文本，超出时显示title文本</p>
+  <ul class="con">
+    <!-- <li class="wrap">
+      <span class="txt">CSS 实现优惠券的技巧 - 2021-03-26</span>
+      <span class="title" title="CSS 实现优惠券的技巧 - 2021-03-26">CSS 实现优惠券的技巧 - 2021-03-26</span>
+    </li> -->
+    <!-- <li class="wrap">
+      <span class="txt">CSS 测试标题，这是一个稍微有点长的标题，超出一行以后才会有title提示，标题是 实现优惠券的技巧 - 2021-03-26</span>
+      <span class="title" title="CSS 测试标题，这是一个稍微有点长的标题，超出一行以后才会有title提示，标题是 实现优惠券的技巧 - 2021-03-26">CSS
+        测试标题，这是一个稍微有点长的标题，超出一行以后才会有title提示，标题是 实现优惠券的技巧 - 2021-03-26</span>
+    </li> -->
+    <li class="wrap">
+      <span class="txt">11第一行文字第一行文字第一行文字第一行文字第一行文字第一行文字第一行文字</span>
+      <span class="title" title="111title标题标题title标题标题title标题标题title标题标题title标题标题title标题标题">22第二行文字第二行文字第二行文字第二行文字第二行文字第二行文字第二行文字第二行文字</span>
+    </li>
+    <!-- <li class="wrap">
+      <span class="txt">asdflkjsdalkfjjfdslakfjas;dlifj;asdlkfjaslkfjasld;kfjaslkfjasl;fjasl;jasdlfkjasflkjasfl;kajsdflkasdjflaskdjfaslkfjasdljkf</span>
+      <span class="title" title="asdflkjsdalkfjjfdslakfjas;dlifj;asdlkfjaslkfjasld;kfjaslkfjasl;fjasl;jasdlfkjasflkjasfl;kajsdflkasdjflaskdjfaslkfjasdljkf">asdflkjsdalkfjjfdslakfjas;dlifj;asdlkfjaslkfjasld;kfjaslkfjasl;fjasl;jasdlfkjasflkjasfl;kajsdflkasdjflaskdjfaslkfjasdljkf</span>
+    </li> -->
+    <!-- <li class="wrap">
+      <span class="txt">CSS 拖拽?</span>
+      <span class="title" title="CSS 拖拽?">CSS 拖拽?</span>
+    </li>
+    <li class="wrap">
+      <span class="txt">CSS 文本超出自动显示title</span>
+      <span class="title" title="CSS 文本超出自动显示title">CSS 文本超出自动显示title</span>
+    </li> -->
+  </ul>
+  <style>
+    .con {
+      width: 400px;
+      overflow: hidden;
+      resize: horizontal;
+      margin: 100px auto;
+      /* font-size: 14px;
+      color: #666;
+      width: 400px;
+      margin: 50px auto;
+      border-radius: 8px;
+      padding: 15px;
+      overflow: hidden;
+      resize: horizontal;
+      box-shadow: 20px 20px 60px #bebebe,
+        -20px -20px 60px #ffffff; */
+    }
+
+    .wrap {
+      line-height: 2;
+      height: 2em;
+      /* 防止多行之间内容互相影响 */
+      overflow: hidden;
+      /* 适配英文 */
+      word-break: break-all;
+      background: #fff;
+      /* position: relative;
+      line-height: 2;
+      height: 2em;
+      padding: 0 10px;
+      overflow: hidden;
+      background: #fff;
+      margin: 5px 0; */
+    }
+
+    .wrap:nth-child(odd) {
+      /* 奇数行修改背景色，可以不用 */
+      background: #f5f5f5;
+    }
+
+    .txt {
+      display: block;
+      /* 最多显示2行，不然就把 title 顶到下面了 */
+      max-height: 4em;
+      color: red;
+    }
+
+    .title {
+      /* 背景色让其不透明，从而盖住txt的第一行 */
+      background: inherit;
+      position: relative;
+      /* 限定高度，防止title中内容换行时，覆盖到下一行的 txt 文本内容 */
+      height: 2em;
+      /* 让txt不换行时，刚好在其上一行，当txt换行时，刚好让title下移一行显示在txt第一行层级之上 */
+      top: -4em;
+      /* 块级标签，从而让其占用全部宽度，否则内容会被::before顶去一部分，从而暴露txt第一行 */
+      display: block;
+      /* 让title中超出的文本不会影响到下一行的txt，配合height使用 */
+      overflow: hidden;
+      /* display: block;
+      position: relative;
+      background: inherit;
+      text-align: justify;
+      height: 2em;
+      overflow: hidden;
+      top: -4em; */
+    }
+
+    .title::before {
+      content: attr(title);
+      width: 50%;
+      float: right;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      /* 反方向书写文本 */
+      direction: rtl;
+    }
+
+  </style>
+</body>
+
+</html>
